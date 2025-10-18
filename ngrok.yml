@@ -1,0 +1,7 @@
+version: "2"
+authtoken: 29RBvHe9lLa8wAAKnmp3va1ZkZy_5pdk1BaeBCgcp3pEjAjRx
+region: eu
+tunnels:
+  socketio:
+    proto: http
+    addr: 3000

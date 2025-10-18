@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Test Caméra + Audio — Socket.IO (Front-only)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, Arial, sans-serif; }
+    body { margin: 0; background: #0b1220; color: #e6ebff; }
+    main { max-width: 980px; margin: 24px auto; padding: 16px; }
+    h1 { margin: 0 0 12px; font-size: 20px; }
+    .card { background: #111a2f; border: 1px solid #243254; border-radius: 12px; padding: 16px; }
+    .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 12px 0; }
+    label { display: inline-flex; align-items: center; gap: 8px; background: #0e1730; padding: 6px 10px; border-radius: 8px; }
+    input[type="number"], input[type="text"] { width: 120px; padding: 6px 8px; border: 1px solid #2a3a6a; border-radius: 6px; background: #0c1530; color: #e6ebff; }
+    input[type="text"] { width: 320px; }
+    button { padding: 8px 14px; border: 0; border-radius: 8px; background: #2b59ff; color: #fff; cursor: pointer; }
+    button.secondary { background: #26407a; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    video { width: 100%; max-height: 60vh; background: #000; border-radius: 8px; }
+    .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; color: #b9c6ff; }
+    .badge { background: #0e1730; padding: 4px 8px; border-radius: 6px; }
+    small.hint { color: #9fb0ff; display:block; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Test Caméra + Audio — Socket.IO (Front-only)</h1>
+    <div class="card">
+      <div class="row">
+        <label>Serveur Socket.IO
+          <input id="serverUrl" type="text" placeholder="(optionnel) ex: https://mon-domaine:3000" value="https://3383f67b7ee5.ngrok-free.app" />
+        </label>
+        <label>FPS vidéo
+          <input id="fps" type="number" min="1" max="30" step="1" value="8" />
+        </label>
+        <label>Qualité JPEG
+          <input id="jpegq" type="number" min="0.1" max="1.0" step="0.1" value="0.6" />
+        </label>
+        <label>Largeur
+          <input id="vw" type="number" min="160" max="1920" step="1" value="1280" />
+        </label>
+        <label>Hauteur
+          <input id="vh" type="number" min="120" max="1080" step="1" value="720" />
+        </label>
+      </div>
+
+      <div class="row">
+        <button id="startBtn">Démarrer</button>
+        <button id="stopBtn" class="secondary" disabled>Arrêter</button>
+      </div>
+
+      <video id="preview" playsinline autoplay muted></video>
+      <canvas id="frameCanvas" style="display:none;"></canvas>
+
+      <div class="stats">
+        <div class="badge">Frames envoyées: <span id="frames">0</span></div>
+        <div class="badge">Audio chunks: <span id="chunks">0</span></div>
+        <div class="badge">État: <span id="status">—</span></div>
+      </div>
+      <small class="hint">
+        Évènements émis côté client: <code>video-frame</code> (ArrayBuffer JPEG), <code>audio-webm</code> (ArrayBuffer WebM/Opus).<br>
+        Laissez l’URL vide pour se connecter à la même origine.
+      </small>
+    </div>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+
+  <script>
+    'use strict';
+
+    // UI elements
+    const el = {
+      serverUrl: document.getElementById('serverUrl'),
+      fps: document.getElementById('fps'),
+      jpegq: document.getElementById('jpegq'),
+      vw: document.getElementById('vw'),
+      vh: document.getElementById('vh'),
+      startBtn: document.getElementById('startBtn'),
+      stopBtn: document.getElementById('stopBtn'),
+      video: document.getElementById('preview'),
+      canvas: document.getElementById('frameCanvas'),
+      frames: document.getElementById('frames'),
+      chunks: document.getElementById('chunks'),
+      status: document.getElementById('status'),
+    };
+
+    // State
+    let stream = null;
+    let socket = null;
+    let frameTimer = null;
+    let framesSent = 0;
+    let chunksSent = 0;
+    let mediaRecorder = null;
+
+    function setStatus(t) { el.status.textContent = t; }
+
+    function connectSocket() {
+      const url = (el.serverUrl.value || undefined); // undefined => même origine
+      if (socket && socket.connected) return socket;
+      socket = io(url, { transports: ['websocket'] });
+      socket.on('connect', () => setStatus('connecté: ' + socket.id));
+      socket.on('connect_error', (err) => setStatus('erreur connexion: ' + (err?.message || err)));
+      socket.on('disconnect', (reason) => setStatus('déconnecté: ' + reason));
+      return socket;
+    }
+
+    async function start() {
+      if (frameTimer || mediaRecorder) return;
+
+      // 1) Connexion Socket.IO
+      connectSocket();
+
+      // 2) Permissions et capture
+      const width = Math.max(160, Math.min(1920, Number(el.vw.value) || 1280));
+      const height = Math.max(120, Math.min(1080, Number(el.vh.value) || 720));
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: width }, height: { ideal: height }, frameRate: { ideal: 30, max: 30 } },
+          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+        });
+        setStatus('permissions accordées');
+      } catch (e) {
+        setStatus('permissions refusées / périphériques absents');
+        console.error(e);
+        return;
+      }
+
+      // 3) Preview
+      el.video.srcObject = stream;
+      await el.video.play().catch(() => {});
+
+      // 4) Envoi vidéo (frames JPEG)
+      const ctx2d = el.canvas.getContext('2d', { alpha: false, desynchronized: true });
+      function scheduleFrameLoop() {
+        const fps = Math.max(1, Math.min(30, Number(el.fps.value) || 8));
+        const period = Math.round(1000 / fps);
+        clearInterval(frameTimer);
+        frameTimer = setInterval(async () => {
+          if (!socket || !socket.connected) return;
+
+          const q = Math.max(0.1, Math.min(1.0, Number(el.jpegq.value) || 0.6));
+          const W = Math.max(2, Number(el.vw.value) || 1280);
+          const H = Math.max(2, Number(el.vh.value) || 720);
+          el.canvas.width = W;
+          el.canvas.height = H;
+          ctx2d.drawImage(el.video, 0, 0, W, H);
+
+          try {
+            const blob = await new Promise(res => el.canvas.toBlob(res, 'image/jpeg', q));
+            if (!blob) return;
+            const buf = await blob.arrayBuffer();
+            socket.emit('video:frame', { data: buf }); // côté serveur: Buffer.from(payload)
+            framesSent += 1;
+            el.frames.textContent = String(framesSent);
+          } catch (err) {
+            console.error('envoi frame échoué:', err);
+          }
+        }, period);
+      }
+      scheduleFrameLoop();
+      el.fps.addEventListener('change', scheduleFrameLoop);
+
+      // 5) Envoi audio (WebM/Opus) via MediaRecorder
+      try {
+        const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+          ? 'audio/webm;codecs=opus' : 'audio/webm';
+        mediaRecorder = new MediaRecorder(stream, {
+          mimeType: mime,
+          audioBitsPerSecond: 32000 // débit modéré pour diagnostic
+        });
+        mediaRecorder.ondataavailable = async (ev) => {
+          if (!ev.data || ev.data.size === 0) return;
+          if (!socket || !socket.connected) return;
+          const buf = await ev.data.arrayBuffer();
+          socket.emit('audio-webm', buf); // côté serveur: concaténer/écrire segments webm
+          chunksSent += 1;
+          el.chunks.textContent = String(chunksSent);
+        };
+        mediaRecorder.start(200); // chunk ~200 ms
+      } catch (err) {
+        console.warn('MediaRecorder audio indisponible:', err);
+      }
+
+      // 6) UI
+      el.startBtn.disabled = true;
+      el.stopBtn.disabled = false;
+    }
+
+    async function stop() {
+      // stop timers
+      if (frameTimer) { clearInterval(frameTimer); frameTimer = null; }
+
+      // stop media recorder
+      if (mediaRecorder) {
+        try {
+          if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+        } catch {}
+        mediaRecorder = null;
+      }
+
+      // stop tracks
+      if (stream) {
+        for (const t of stream.getTracks()) try { t.stop(); } catch {}
+        stream = null;
+      }
+
+      // keep socket connection open (pour réutilisation), sinon décommentez:
+      // try { socket?.disconnect(); } catch {}
+
+      el.startBtn.disabled = false;
+      el.stopBtn.disabled = true;
+      setStatus('arrêté');
+    }
+
+    // Bind UI
+    el.startBtn.addEventListener('click', start);
+    el.stopBtn.addEventListener('click', stop);
+    window.addEventListener('beforeunload', stop);
+  </script>
+</body>
+</html>
