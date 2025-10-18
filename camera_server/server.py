@@ -62,7 +62,7 @@ if __name__ == '__main__':
     finally:
         s.close()
 
-    print(f"Serveur Flask démarré sur http://{IP_ADDRESS}:5000")
-    print(f"Endpoint pour l'upload d'images: http://{IP_ADDRESS}:5000/upload_image")
+    print(f"Serveur Flask démarré sur http://{IP_ADDRESS}:4040")
+    print(f"Endpoint pour l'upload d'images: http://{IP_ADDRESS}:4040/upload_image")
     print("Assurez-vous que l'application mobile est configurée avec cette adresse IP.")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=4040, debug=True)

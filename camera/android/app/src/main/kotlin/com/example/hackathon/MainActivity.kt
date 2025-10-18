@@ -1,4 +1,4 @@
-package com.example.camera
+package com.example.hackathon
 
 import io.flutter.embedding.android.FlutterActivity
 

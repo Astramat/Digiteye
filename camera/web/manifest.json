@@ -1,6 +1,6 @@
 {
-    "name": "camera",
-    "short_name": "camera",
+    "name": "hackathon",
+    "short_name": "hackathon",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
