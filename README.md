@@ -11,7 +11,7 @@ Voici un aperçu de l’interface de Digiteye :
 
 ## Demo Video
 
-[![Watch the demo]](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
+[![Watch the demo](https://img.youtube.com/vi/9nhiPHMch-w/maxresdefault.jpg)](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
 
 ## Table of Contents
 
