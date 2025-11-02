@@ -11,7 +11,9 @@ Voici un aperçu de l’interface de Digiteye :
 
 ## Demo Video
 
-[![Watch the demo](https://img.youtube.com/vi/9nhiPHMch-w/maxresdefault.jpg)](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
+Découvrez la démonstration complète de **Digiteye** en action :  
+
+[![Watch the demo on YouTube](https://img.youtube.com/vi/SVvIWC7ST24/maxresdefault.jpg)](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
 
 ## Table of Contents
 
@@ -314,11 +316,11 @@ Main routes:
 
 ## Authors
 
-Jacques Marques
-Matthis Brocheton
-Louis De Caumont
-Antoine Dufour
-Alex Di Venanzio
+* Jacques Marques
+* Matthis Brocheton
+* Louis De Caumont
+* Antoine Dufour
+* Alex Di Venanzio
 
 ---
 
