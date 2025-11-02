@@ -6,12 +6,12 @@ Complete project combining a Flutter mobile/web application for real-time video 
 
 Voici un aperçu de l’interface de Digiteye :
 
-![Interface 1](https://github.com/Astramat/Digiteye/image/image_1.png)
-![Interface 2](https://github.com/Astramat/Digiteye/image/image_2.png)
+![Interface 1](https://github.com/Astramat/Digiteye/blob/main/image/image_1.png)
+![Interface 2](https://github.com/Astramat/Digiteye/blob/main/image/image_2.png)
 
 ## Demo Video
 
-[![Watch the demo](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
+[![Watch the demo]](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
 
 ## Table of Contents
 
