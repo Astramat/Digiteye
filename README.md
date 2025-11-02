@@ -1,6 +1,8 @@
 # Digiteye – Video Streaming Application with Visual Intelligence
 
-Complete project combining a Flutter mobile/web application for real-time video streaming and a backend with AI-based image processing (Qwen2-VL-2B-Instruct).
+Digiteye is a real-time video streaming platform designed to produce automated urbanism and accessibility audits from images captured by a connected camera. The system analyzes each frame to detect and report features relevant to urban planning and accessibility — for example sidewalks, curb ramps, crosswalks, signage, obstacles, surface conditions, and visual barriers that may affect people with reduced mobility or visual impairments — and returns concise, structured findings, severity indicators, and suggested remediation steps. This makes Digiteye useful for city planners, accessibility auditors, and community stakeholders who need fast, evidence-backed assessments from live or recorded video feeds.
+
+Model note: the backend demo uses Qwen2-VL-2B-Instruct for multimodal image understanding, but the pipeline is model-agnostic — you can substitute any compatible vision-language model you prefer.
 
 ## App Screenshots
 
@@ -325,3 +327,4 @@ Main routes:
 ---
 
 **Note**: This project requires an NVIDIA GPU with CUDA. CPU-only operation is not supported due to performance constraints.
+
