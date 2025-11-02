@@ -1,125 +1,139 @@
-# Guide de lancement du projet Flutter
+# Flutter Project Launch Guide
 
-## Prérequis
+## Prerequisites
 
-1. **Flutter SDK** installé (version 3.35.6 via FVM ou version compatible)
-2. **Dart SDK** (inclus avec Flutter)
-3. **IDE** recommandé : VS Code ou Android Studio
-4. **Émulateur/Appareil** :
-   - Pour Android : Android Studio avec émulateur ou appareil physique
-   - Pour iOS : Xcode avec simulateur ou appareil physique (Mac uniquement)
-   - Pour Web : navigateur Chrome
-   - Pour Windows : Windows 10/11
+1. **Flutter SDK** installed (version 3.35.6 via FVM or a compatible version)
+2. **Dart SDK** (included with Flutter)
+3. **Recommended IDE**: VS Code or Android Studio
+4. **Emulator/Device**:
 
-## Installation des dépendances
+   * Android: Android Studio emulator or physical device
+   * iOS: Xcode simulator or physical device (Mac only)
+   * Web: Chrome browser
+   * Windows: Windows 10/11
 
-### Option 1 : Avec FVM (Flutter Version Manager)
+## Dependency Installation
 
-Si vous utilisez FVM :
+### Option 1: Using FVM (Flutter Version Manager)
+
+If you are using FVM:
 
 ```bash
-# Naviguer dans le dossier camera
+# Navigate to the camera folder
 cd camera
 
-# Installer la version Flutter spécifiée dans .fvmrc
+# Install the Flutter version specified in .fvmrc
 fvm install
 
-# Utiliser FVM pour les commandes Flutter
+# Use FVM for Flutter commands
 fvm flutter pub get
 ```
 
-### Option 2 : Sans FVM (Flutter standard)
+### Option 2: Without FVM (Standard Flutter)
 
 ```bash
-# Naviguer dans le dossier camera
+# Navigate to the camera folder
 cd camera
 
-# Installer les dépendances
+# Install dependencies
 flutter pub get
 ```
 
-## Lancer l'application
+## Running the Application
 
-### Détecter les appareils disponibles
+### List Available Devices
 
 ```bash
 flutter devices
 ```
 
-### Lancer sur différentes plateformes
+### Run on Different Platforms
 
 #### Android
+
 ```bash
 flutter run
-# ou spécifier un appareil
+# Or specify a device
 flutter run -d <device-id>
 ```
 
-#### iOS (Mac uniquement)
+#### iOS (Mac only)
+
 ```bash
 flutter run -d ios
 ```
 
 #### Web
+
 ```bash
 flutter run -d chrome
-# ou
+# Or with a specific port
 flutter run -d web-server --web-port=8080
 ```
 
 #### Windows
+
 ```bash
 flutter run -d windows
 ```
 
 #### macOS
+
 ```bash
 flutter run -d macos
 ```
 
-## Commandes utiles
+## Useful Commands
 
-### Mode debug (avec hot reload)
+### Debug Mode (with hot reload)
+
 ```bash
 flutter run
 ```
-- Appuyez sur `r` pour hot reload
-- Appuyez sur `R` pour hot restart
-- Appuyez sur `q` pour quitter
 
-### Mode release (optimisé)
+* Press `r` for hot reload
+* Press `R` for hot restart
+* Press `q` to quit
+
+### Release Mode (optimized)
+
 ```bash
 flutter run --release
 ```
 
-### Nettoyer le projet
+### Clean the Project
+
 ```bash
 flutter clean
 flutter pub get
 ```
 
-### Générer du code (si nécessaire)
+### Code Generation (if needed)
+
 ```bash
 flutter pub run build_runner build
-# ou en mode watch
+# Or in watch mode
 flutter pub run build_runner watch
 ```
 
-## Dépannage
+## Troubleshooting
 
-### Vérifier l'installation Flutter
+### Check Flutter Installation
+
 ```bash
 flutter doctor
 ```
 
-### Résoudre les problèmes de dépendances
+### Resolve Dependency Issues
+
 ```bash
 flutter clean
 flutter pub get
 flutter pub upgrade
 ```
 
-### Problèmes spécifiques Android
+### Android-Specific Issues
+
 ```bash
 cd android
 ./gradlew clean
@@ -128,7 +142,8 @@ flutter clean
 flutter pub get
 ```
 
-### Problèmes spécifiques iOS
+### iOS-Specific Issues
+
 ```bash
 cd ios
 pod install
@@ -139,31 +154,31 @@ flutter pub get
 
 ## Configuration
 
-### URL du serveur Socket.IO
+### Socket.IO Server URL
 
-Le serveur Socket.IO est configuré dans `lib/shared/services/socket_service.dart` :
-- URL par défaut : `http://localhost:3000`
-- Modifiable dans le code ou via configuration
+The Socket.IO server is configured in `lib/shared/services/socket_service.dart`:
 
-### Permissions requises
+* Default URL: `http://localhost:3000`
+* Can be modified in code or via configuration
 
-L'application nécessite :
-- **Caméra** : pour le streaming vidéo
-- **Microphone** : pour l'audio (si activé)
+### Required Permissions
 
-Ces permissions sont gérées automatiquement via `permission_handler`.
+The app requires:
 
-## Structure du projet
+* **Camera**: for video streaming
+* **Microphone**: for audio (if enabled)
 
-- `lib/main.dart` : Point d'entrée de l'application
-- `lib/app.dart` : Configuration de l'application
-- `lib/features/` : Fonctionnalités (auth, socket, stream)
-- `lib/shared/services/` : Services partagés (socket, streaming, etc.)
-- `lib/core/` : Code core (DI, network, storage, etc.)
+Permissions are automatically managed via `permission_handler`.
+
+## Project Structure
+
+* `lib/main.dart`: Application entry point
+* `lib/app.dart`: App configuration
+* `lib/features/`: Features (auth, socket, stream)
+* `lib/shared/services/`: Shared services (socket, streaming, etc.)
+* `lib/core/`: Core code (DI, network, storage, etc.)
 
 ## Support
 
-Pour plus d'informations :
-- Documentation Flutter : https://docs.flutter.dev
-- Documentation Dart : https://dart.dev
-
+* Flutter Documentation: [https://docs.flutter.dev](https://docs.flutter.dev)
+* Dart Documentation: [https://dart.dev](https://dart.dev)

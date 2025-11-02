@@ -1,99 +1,110 @@
-# Digiteye - Application de streaming vidéo avec intelligence visuelle
+# Digiteye – Video Streaming Application with Visual Intelligence
 
-Projet complet combinant une application Flutter mobile/web pour le streaming vidéo en temps réel et un backend avec traitement d'images par IA (Qwen2-VL-2B-Instruct).
+Complete project combining a Flutter mobile/web application for real-time video streaming and a backend with AI-based image processing (Qwen2-VL-2B-Instruct).
 
-## 📋 Table des matières
+## App Screenshots
 
-- [Vue d'ensemble](#vue-densemble)
-- [Architecture](#architecture)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Lancement](#lancement)
-- [Structure du projet](#structure-du-projet)
-- [Documentation](#documentation)
-- [Configuration](#configuration)
+Voici un aperçu de l’interface de Digiteye :
 
-## 🎯 Vue d'ensemble
+![Interface 1](https://github.com/Astramat/Digiteye/image/image_1.png)
+![Interface 2](https://github.com/Astramat/Digiteye/image/image_2.png)
 
-Digiteye est une plateforme de streaming vidéo en temps réel avec analyse d'images par IA. Le projet comprend :
+## Demo Video
 
-- **Application Flutter** : Interface mobile/web pour streaming vidéo en temps réel
-- **Serveur Socket.IO** : Gestion des communications temps réel (Node.js/TypeScript)
-- **Serveur FastAPI** : Traitement d'images avec modèle Qwen2-VL-2B-Instruct (Python)
+[![Watch the demo](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)](https://www.youtube.com/shorts/SVvIWC7ST24?feature=share)
 
-### Fonctionnalités principales
+## Table of Contents
 
-- ✅ Streaming vidéo en temps réel depuis la caméra
-- ✅ Communication temps réel via Socket.IO
-- ✅ Analyse d'images avec Qwen2-VL-2B-Instruct
-- ✅ Génération de descriptions d'images (captioning)
-- ✅ Support multi-plateforme (Android, iOS, Web, Windows, macOS)
+* [Overview](#overview)
+* [Architecture](#architecture)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+* [Running the Project](#running-the-project)
+* [Project Structure](#project-structure)
+* [Documentation](#documentation)
+* [Configuration](#configuration)
 
-## 🏗️ Architecture
+## Overview
+
+Digiteye is a real-time video streaming platform with AI-powered image analysis. The project includes:
+
+* **Flutter Application**: Mobile/web interface for real-time video streaming
+* **Socket.IO Server**: Real-time communication handling (Node.js/TypeScript)
+* **FastAPI Server**: Image processing using Qwen2-VL-2B-Instruct (Python)
+
+### Key Features
+
+* ✅ Real-time video streaming from camera
+* ✅ Real-time communication via Socket.IO
+* ✅ Image analysis with Qwen2-VL-2B-Instruct
+* ✅ Automatic image captioning
+* ✅ Multi-platform support (Android, iOS, Web, Windows, macOS)
+
+## Architecture
 
 ```
 Digiteye/
-├── camera/              # Application Flutter
-│   ├── lib/            # Code source Dart
+├── camera/              # Flutter application
+│   ├── lib/            # Dart source code
 │   └── ...
 ├── server/             # Backend
-│   ├── src/            # Serveur Socket.IO (TypeScript)
-│   ├── bridge.py       # Serveur FastAPI (Python)
+│   ├── src/            # Socket.IO server (TypeScript)
+│   ├── bridge.py       # FastAPI server (Python)
 │   └── ...
-└── camera_server/      # Serveur Flask pour upload d'images
+└── camera_server/      # Flask server for image uploads
 ```
 
-### Flux de données
+### Data Flow
 
 ```
 [Flutter App] ←→ [Socket.IO Server] ←→ [FastAPI Bridge (Qwen2-VL)]
      ↓
-[Caméra/Capture] → [Streaming vidéo] → [Analyse IA]
+[Camera/Capture] → [Video Streaming] → [AI Analysis]
 ```
 
-## 📦 Prérequis
+## Prerequisites
 
-### Pour le backend (serveur)
+### Backend (Server)
 
-- **Python 3.8+** avec pip
-- **Node.js 18+** et npm
-- **CUDA** et **PyTorch avec CUDA** (pour le traitement GPU)
-- **Carte graphique NVIDIA** avec support CUDA
-- **ngrok** (optionnel, pour exposer le serveur Socket.IO)
+* **Python 3.8+** with pip
+* **Node.js 18+** and npm
+* **CUDA** and **PyTorch with CUDA** (GPU required)
+* **NVIDIA GPU** with CUDA support
+* **ngrok** (optional, to expose Socket.IO server)
 
-### Pour l'application Flutter
+### Flutter Application
 
-- **Flutter SDK 3.35.6** ou compatible
-- **Dart SDK** (inclus avec Flutter)
-- **IDE** : VS Code ou Android Studio
-- **Émulateur/appareil** pour tester
+* **Flutter SDK 3.35.6** or compatible
+* **Dart SDK** (included with Flutter)
+* **IDE**: VS Code or Android Studio
+* **Emulator/device** for testing
 
-## 🚀 Installation
+## Installation
 
-### 1. Backend - Serveur Socket.IO
+### 1. Backend – Socket.IO Server
 
 ```bash
 cd server
 npm install
 ```
 
-### 2. Backend - Serveur FastAPI (Python)
+### 2. Backend – FastAPI Server (Python)
 
 ```bash
 cd server
 pip install -r requirements.txt
 ```
 
-**Note importante** : Le serveur FastAPI nécessite une carte graphique NVIDIA avec CUDA. Les poids du modèle Qwen2-VL-2B-Instruct (environ 2GB) seront téléchargés automatiquement au premier lancement.
+**Important Note**: FastAPI server requires an NVIDIA GPU with CUDA. Qwen2-VL-2B-Instruct model weights (~2GB) will be downloaded automatically on first run.
 
-### 3. Application Flutter
+### 3. Flutter Application
 
 ```bash
 cd camera
 flutter pub get
 ```
 
-Si vous utilisez **FVM** (Flutter Version Manager) :
+If using **FVM (Flutter Version Manager)**:
 
 ```bash
 cd camera
@@ -101,158 +112,160 @@ fvm install
 fvm flutter pub get
 ```
 
-## ▶️ Lancement
+## Running the Project
 
-### Méthode recommandée : Lancement manuel dans des terminaux séparés
+### Recommended Method: Run manually in separate terminals
 
-Pour une meilleure gestion et visualisation des logs, lancez chaque serveur dans un terminal séparé.
+This allows better log management and debugging.
 
-#### Terminal 1 : Serveur Socket.IO
+#### Terminal 1: Socket.IO Server
 
 ```bash
 cd server
 npm run dev
-# ou pour la production
+# or for production
 npm start
 ```
 
-Le serveur démarre sur le port par défaut (généralement 3000).
+Server runs on the default port (usually 3000).
 
-#### Terminal 2 : Serveur FastAPI (Qwen2-VL)
+#### Terminal 2: FastAPI Server (Qwen2-VL)
 
 ```bash
 cd server
 python bridge.py
-# ou si vous utilisez python3
+# or
 python3 bridge.py
 ```
 
-Le serveur démarre sur `http://localhost:8089`.
+Server runs on `http://localhost:8089`.
 
-**Endpoints disponibles** :
-- `GET /` : Informations sur le serveur
-- `GET /healthz` : État de santé du serveur
-- `POST /caption-file` : Génération de description d'image
+**Available Endpoints**:
 
-#### Terminal 3 : Application Flutter
+* `GET /` : Server info
+* `GET /healthz` : Health check
+* `POST /caption-file` : Generate image captions
+
+#### Terminal 3: Flutter Application
 
 ```bash
 cd camera
-flutter run -d Edge      # Pour le web
-flutter run -d Windows     # Pour Windows
-flutter run -d android     # Pour Android
+flutter run -d Edge      # For web
+flutter run -d Windows   # For Windows
+flutter run -d android   # For Android
 ```
 
-**Note** : Consultez `camera/LAUNCH.md` pour des instructions détaillées sur le lancement de l'application Flutter.
+**Note**: See `camera/LAUNCH.md` for detailed Flutter launch instructions.
 
-### Exposer le serveur Socket.IO (ngrok)
-
-Pour permettre à l'application mobile de se connecter :
+### Expose Socket.IO Server (ngrok)
 
 ```bash
 cd server
 ngrok start --config=./ngrok.yml socketio
 ```
 
-Mettez à jour l'URL dans `camera/lib/shared/services/socket_service.dart` avec l'URL ngrok.
+Update the URL in `camera/lib/shared/services/socket_service.dart` with your ngrok URL.
 
-## 📁 Structure du projet
+## Project Structure
 
 ```
 Digiteye/
-├── camera/                    # Application Flutter
+├── camera/                    # Flutter application
 │   ├── lib/
-│   │   ├── main.dart          # Point d'entrée
-│   │   ├── app.dart           # Configuration de l'app
-│   │   ├── features/          # Fonctionnalités
-│   │   │   ├── auth/          # Authentification
-│   │   │   ├── socket/         # Connexion Socket.IO
-│   │   │   └── stream/        # Streaming vidéo
+│   │   ├── main.dart          # Entry point
+│   │   ├── app.dart           # App configuration
+│   │   ├── features/          # Feature modules
+│   │   │   ├── auth/          # Authentication
+│   │   │   ├── socket/        # Socket.IO connection
+│   │   │   └── stream/        # Video streaming
 │   │   ├── shared/
-│   │   │   └── services/      # Services partagés
-│   │   └── core/              # Code core (DI, network, etc.)
-│   ├── pubspec.yaml           # Dépendances Flutter
-│   └── LAUNCH.md              # Guide de lancement Flutter
+│   │   │   └── services/      # Shared services
+│   │   └── core/              # Core logic (DI, networking, etc.)
+│   ├── pubspec.yaml           # Flutter dependencies
+│   └── LAUNCH.md              # Flutter launch guide
 │
 ├── server/                    # Backend
 │   ├── src/
-│   │   ├── server.ts          # Serveur Express principal
-│   │   ├── socket_manager.ts  # Gestionnaire Socket.IO
+│   │   ├── server.ts          # Main Express server
+│   │   ├── socket_manager.ts  # Socket.IO manager
 │   │   └── routes/
-│   │       └── sockets/       # Routes Socket.IO
-│   ├── bridge.py              # Serveur FastAPI (Qwen2-VL)
-│   ├── weights/               # Poids du modèle (auto-downloadé)
-│   ├── package.json           # Dépendances Node.js
-│   ├── requirements.txt      # Dépendances Python
-│   └── SOCKET_ROUTES.md       # Documentation routes Socket.IO
+│   │       └── sockets/       # Socket.IO routes
+│   ├── bridge.py              # FastAPI (Qwen2-VL)
+│   ├── weights/               # Model weights (auto-download)
+│   ├── package.json           # Node.js dependencies
+│   ├── requirements.txt       # Python dependencies
+│   └── SOCKET_ROUTES.md       # Socket.IO routes documentation
 │
-└── README.md                  # Ce fichier
+└── README.md                  # This file
 ```
 
-## 📚 Documentation
+## Documentation
 
-- **Application Flutter** : Voir `camera/LAUNCH.md`
-- **Routes Socket.IO** : Voir `server/SOCKET_ROUTES.md`
-- **Architecture Flutter** : Voir `camera/ARCHITECTURE.md`
+* **Flutter Application**: See `camera/LAUNCH.md`
+* **Socket.IO Routes**: See `server/SOCKET_ROUTES.md`
+* **Flutter Architecture**: See `camera/ARCHITECTURE.md`
 
-## ⚙️ Configuration
+## Configuration
 
-### Configuration du serveur Socket.IO
+### Socket.IO Server Configuration
 
-L'URL du serveur est configurée dans :
-- `camera/lib/shared/services/socket_service.dart` : URL par défaut
-- Variable d'environnement ou fichier de configuration
+Server URL is set in:
 
-### Configuration du serveur FastAPI
+* `camera/lib/shared/services/socket_service.dart` (default URL)
+* Environment variable or config file
 
-Variables d'environnement (optionnelles) :
+### FastAPI Server Configuration
+
+Optional environment variables:
 
 ```bash
-# Dossier de stockage des poids du modèle
+# Directory for model weights
 export WEIGHTS_DIR="./weights/Qwen2-VL-2B-Instruct"
 
-# Limite de concurrence
+# Max concurrent requests
 export MAX_CONCURRENT=1
 
-# Timeout d'acquisition
+# Acquisition timeout
 export ACQUIRE_TIMEOUT_S=0
 
-# Délai avant retry
+# Retry delay
 export RETRY_AFTER_S=1
 ```
 
-### Prompt par défaut du modèle
+### Default Model Prompt
 
-Modifiable dans `server/bridge.py` :
+Can be modified in `server/bridge.py`:
 
 ```python
 DEFAULT_PROMPT = "Describe this image in accurate, concise detail."
 ```
 
-## 🔧 Dépannage
+## Troubleshooting
 
-### Le serveur FastAPI ne démarre pas
+### FastAPI Server Won’t Start
 
-1. **Vérifier CUDA** :
+1. **Check CUDA**:
+
    ```bash
    python -c "import torch; print(torch.cuda.is_available())"
    ```
 
-2. **Vérifier les dépendances** :
+2. **Check dependencies**:
+
    ```bash
    pip install -r server/requirements.txt
    ```
 
-3. **Vérifier l'espace disque** : Le modèle nécessite ~2GB
+3. **Check disk space**: Model requires ~2GB
 
-### L'application Flutter ne se connecte pas
+### Flutter App Cannot Connect
 
-1. **Vérifier l'URL du serveur** dans `socket_service.dart`
-2. **Vérifier que le serveur Socket.IO est démarré**
-3. **Vérifier ngrok** si utilisé en production
-4. **Vérifier les permissions** (caméra, microphone)
+1. Verify server URL in `socket_service.dart`
+2. Ensure Socket.IO server is running
+3. Check ngrok if used in production
+4. Verify permissions (camera, microphone)
 
-### Problèmes de dépendances Flutter
+### Flutter Dependency Issues
 
 ```bash
 cd camera
@@ -260,7 +273,7 @@ flutter clean
 flutter pub get
 ```
 
-### Problèmes de build
+### Build Issues
 
 ```bash
 # Android
@@ -272,62 +285,41 @@ cd camera/ios
 pod install
 ```
 
-## 📝 Endpoints API
+## API Endpoints
 
 ### FastAPI (Qwen2-VL)
 
-- **GET `/`** : Informations sur le serveur
-- **GET `/healthz`** : État de santé
-- **POST `/caption-file`** : Générer une description d'image
-  - Paramètres :
-    - `file` : Fichier image (obligatoire)
-    - `prompt` : Prompt personnalisé (optionnel)
-    - `max_new_tokens` : Nombre max de tokens (défaut: 128)
-    - `temperature` : Température de génération (défaut: 0.2)
+* **GET `/`** : Server info
+* **GET `/healthz`** : Health check
+* **POST `/caption-file`** : Generate image captions
+
+  * Parameters:
+
+    * `file` : Image file (required)
+    * `prompt` : Custom prompt (optional)
+    * `max_new_tokens` : Max tokens (default: 128)
+    * `temperature` : Generation temperature (default: 0.2)
 
 ### Socket.IO
 
-Voir `server/SOCKET_ROUTES.md` pour la documentation complète.
+See `server/SOCKET_ROUTES.md` for full documentation.
 
-Principales routes :
-- `connection:welcome` : Message de bienvenue
-- `session:start` : Démarrer une session
-- `video:frame` : Envoi de frame vidéo
-- `llm:message` : Message au LLM
-- `llm:response` : Réponse du LLM
+Main routes:
 
-## 🤝 Contribution
+* `connection:welcome` : Welcome message
+* `session:start` : Start session
+* `video:frame` : Send video frame
+* `llm:message` : Send message to LLM
+* `llm:response` : Receive LLM response
 
-Pour contribuer au projet :
+## Authors
 
-1. Fork le projet
-2. Créez une branche (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Pushez vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
-
-## 📄 Licence
-
-[À compléter selon votre licence]
-
-## 👥 Auteurs
-
-[À compléter]
-
-## 🙏 Remerciements
-
-- **Qwen Team** pour le modèle Qwen2-VL-2B-Instruct
-- **Flutter** pour le framework multiplateforme
-- **Socket.IO** pour la communication temps réel
-- **FastAPI** pour l'API Python moderne
-
-## 📞 Support
-
-Pour toute question ou problème :
-- Créez une issue sur GitHub
-- Consultez la documentation dans chaque dossier
+Jacques Marques
+Matthis Brocheton
+Louis De Caumont
+Antoine Dufour
+Alex Di Venanzio
 
 ---
 
-**Note** : Ce projet nécessite une carte graphique NVIDIA avec CUDA pour fonctionner correctement. Le traitement CPU n'est pas supporté pour des raisons de performance.
-
+**Note**: This project requires an NVIDIA GPU with CUDA. CPU-only operation is not supported due to performance constraints.

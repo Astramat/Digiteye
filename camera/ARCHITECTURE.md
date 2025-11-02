@@ -1,210 +1,234 @@
-# Architecture Flutter Standardisée
+# Standardized Flutter Architecture
 
-## 📁 Structure du Projet
+## Project Structure
 
 ```
 lib/
-├── main.dart                    # Point d'entrée de l'application
-├── app.dart                     # Configuration principale de l'app
-├── constants/                   # Constantes globales
-│   ├── app_constants.dart      # Constantes générales
-│   ├── api_endpoints.dart      # Endpoints API
-│   └── app_strings.dart        # Chaînes de caractères
-├── core/                       # Fonctionnalités transversales
-│   ├── error/                  # Gestion des erreurs
-│   ├── network/                # Gestion réseau
-│   ├── storage/                # Stockage local et sécurisé
-│   ├── theme/                  # Système de thèmes
-│   ├── utils/                  # Utilitaires transversaux
-│   └── di/                     # Injection de dépendances
-├── features/                   # Fonctionnalités métier
-│   └── auth/                   # Exemple de feature complète
-│       ├── data/               # Couche données
-│       ├── domain/             # Couche métier
-│       ├── presentation/       # Couche présentation
-│       └── auth.dart           # Export barrel
-└── shared/                     # Éléments partagés
-    ├── widgets/                # Widgets réutilisables
-    ├── services/               # Services globaux
-    └── utils/                  # Utilitaires partagés
+├── main.dart                    # Application entry point
+├── app.dart                     # Main app configuration
+├── constants/                   # Global constants
+│   ├── app_constants.dart       # General constants
+│   ├── api_endpoints.dart       # API endpoints
+│   └── app_strings.dart         # String resources
+├── core/                        # Cross-cutting functionalities
+│   ├── error/                   # Error handling
+│   ├── network/                 # Network management
+│   ├── storage/                 # Local and secure storage
+│   ├── theme/                   # Theme system
+│   ├── utils/                   # Cross-cutting utilities
+│   └── di/                      # Dependency injection
+├── features/                    # Business features
+│   └── auth/                    # Example of a complete feature
+│       ├── data/                # Data layer
+│       ├── domain/              # Domain layer
+│       ├── presentation/        # Presentation layer
+│       └── auth.dart            # Barrel export
+└── shared/                      # Shared elements
+    ├── widgets/                 # Reusable widgets
+    ├── services/                # Global services
+    └── utils/                   # Shared utilities
 ```
 
-## 🏗️ Architecture Clean Architecture
+## Clean Architecture
 
-### Principe de Séparation des Couches
+### Layer Separation Principles
 
-1. **Presentation Layer** : Interface utilisateur (UI)
-   - Pages
-   - Widgets
-   - BLoCs/Providers
-   - Navigation
+1. **Presentation Layer**: User interface
 
-2. **Domain Layer** : Logique métier pure
-   - Entities
-   - Use Cases
-   - Repository Interfaces
+   * Pages
+   * Widgets
+   * BLoCs/Providers
+   * Navigation
 
-3. **Data Layer** : Gestion des données
-   - Models
-   - Data Sources (Remote/Local)
-   - Repository Implementations
+2. **Domain Layer**: Pure business logic
 
-### Flux de Données
+   * Entities
+   * Use Cases
+   * Repository Interfaces
+
+3. **Data Layer**: Data management
+
+   * Models
+   * Data Sources (Remote/Local)
+   * Repository Implementations
+
+### Data Flow
 
 ```
 UI → BLoC → Use Case → Repository → Data Source
  ↑                                    ↓
- ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+ ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
 ```
 
-## 🎨 Système de Thèmes
+## Theme System
 
 ### Structure
-- `AppColors` : Palette de couleurs standardisée
-- `AppTextStyles` : Styles de texte cohérents
-- `AppSpacing` : Espacements standardisés
-- `AppBorderRadius` : Rayons de bordure uniformes
 
-### Thèmes Disponibles
-- Thème clair (LightTheme)
-- Thème sombre (DarkTheme)
-- Support du mode système
+* `AppColors` : Standardized color palette
+* `AppTextStyles` : Consistent text styles
+* `AppSpacing` : Standardized spacing
+* `AppBorderRadius` : Uniform border radius
 
-## 🔧 Injection de Dépendances
+### Available Themes
+
+* Light Theme
+* Dark Theme
+* System mode support
+
+## Dependency Injection
 
 ### Service Locator Pattern
-Utilisation de `get_it` pour la gestion des dépendances :
+
+Using `get_it` for dependency management:
 
 ```dart
-// Enregistrement
+// Registration
 sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(...));
 
-// Utilisation
+// Usage
 final authRepo = sl<AuthRepository>();
 ```
 
-## 📱 Gestion d'État avec BLoC
+## State Management with BLoC
 
-### Structure BLoC
-- **Event** : Événements utilisateur
-- **State** : États de l'application
-- **Bloc** : Logique de gestion d'état
+### BLoC Structure
 
-### Exemple d'utilisation
+* **Event**: User-triggered events
+* **State**: Application states
+* **Bloc**: State management logic
+
+### Example Usage
+
 ```dart
 BlocConsumer<AuthBloc, AuthState>(
   listener: (context, state) {
-    // Gestion des effets de bord
+    // Side effect handling
   },
   builder: (context, state) {
-    // Construction de l'UI
+    // Build UI
   },
 )
 ```
 
-## 🌐 Gestion Réseau
+## Network Management
 
 ### API Client
-- Client HTTP centralisé
-- Gestion des timeouts
-- Intercepteurs personnalisables
-- Gestion d'erreurs automatique
+
+* Centralized HTTP client
+* Timeout management
+* Customizable interceptors
+* Automatic error handling
 
 ### Network Info
-- Vérification de connectivité
-- Gestion hors ligne/en ligne
 
-## 💾 Stockage
+* Connectivity checking
+* Offline/online handling
 
-### Stockage Local
-- `SharedPreferences` pour les données simples
-- Gestion des erreurs centralisée
+## Storage
 
-### Stockage Sécurisé
-- `FlutterSecureStorage` pour les données sensibles
-- Tokens d'authentification
-- Clés API
+### Local Storage
 
-## 🛡️ Gestion des Erreurs
+* `SharedPreferences` for simple data
+* Centralized error handling
 
-### Types d'Erreurs
-- `ServerException` : Erreurs serveur
-- `CacheException` : Erreurs de cache
-- `NetworkException` : Erreurs réseau
-- `ValidationException` : Erreurs de validation
+### Secure Storage
+
+* `FlutterSecureStorage` for sensitive data
+* Authentication tokens
+* API keys
+
+## Error Handling
+
+### Error Types
+
+* `ServerException`: Server errors
+* `CacheException`: Cache errors
+* `NetworkException`: Network errors
+* `ValidationException`: Validation errors
 
 ### Error Handler
-Conversion automatique des exceptions en `Failure` avec gestion centralisée.
 
-## 📋 Validation et Formatage
+Automatic conversion of exceptions to `Failure` with centralized management.
+
+## Validation and Formatting
 
 ### Validators
-- Validation d'email
-- Validation de mot de passe
-- Validation de téléphone
-- Validation personnalisée
+
+* Email validation
+* Password validation
+* Phone validation
+* Custom validation
 
 ### Formatters
-- Formatage de dates
-- Formatage de devises
-- Formatage de nombres
-- Formatage de texte
 
-## 🎯 Widgets Partagés
+* Date formatting
+* Currency formatting
+* Number formatting
+* Text formatting
 
-### Boutons
-- `PrimaryButton` : Bouton principal
-- `SecondaryButton` : Bouton secondaire
+## Shared Widgets
 
-### Champs de Saisie
-- `CustomTextField` : Champ de texte personnalisé
-- `EmailTextField` : Champ email avec validation
-- `PasswordTextField` : Champ mot de passe
+### Buttons
 
-### Cartes et Dialogs
-- `CustomCard` : Carte personnalisée
-- `LoadingDialog` : Dialog de chargement
-- `ConfirmationDialog` : Dialog de confirmation
+* `PrimaryButton`: Main button
+* `SecondaryButton`: Secondary button
 
-## 🚀 Services Globaux
+### Input Fields
+
+* `CustomTextField`: Custom text field
+* `EmailTextField`: Email field with validation
+* `PasswordTextField`: Password field
+
+### Cards and Dialogs
+
+* `CustomCard`: Custom card
+* `LoadingDialog`: Loading dialog
+* `ConfirmationDialog`: Confirmation dialog
+
+## Global Services
 
 ### Navigation Service
-- Navigation centralisée
-- Gestion des routes
-- Snackbars automatiques
+
+* Centralized navigation
+* Route management
+* Automatic snackbars
 
 ### Notification Service
-- Gestion des notifications
-- Toast messages
-- Notifications push
+
+* Notification handling
+* Toast messages
+* Push notifications
 
 ### Analytics Service
-- Tracking d'événements
-- Métriques utilisateur
-- Analytics Firebase
 
-## 📝 Conventions de Nommage
+* Event tracking
+* User metrics
+* Firebase analytics
 
-### Fichiers
-- **Pages** : `*_page.dart`
-- **Widgets** : `*_widget.dart`
-- **Blocs** : `*_bloc.dart`
-- **Modèles** : `*_model.dart`
-- **Entités** : `*_entity.dart`
-- **Use Cases** : `*_use_case.dart`
+## Naming Conventions
+
+### Files
+
+* **Pages**: `*_page.dart`
+* **Widgets**: `*_widget.dart`
+* **Blocs**: `*_bloc.dart`
+* **Models**: `*_model.dart`
+* **Entities**: `*_entity.dart`
+* **Use Cases**: `*_use_case.dart`
 
 ### Classes
-- **Pages** : `*Page`
-- **Widgets** : `*Widget`
-- **Blocs** : `*Bloc`
-- **Events** : `*Event`
-- **States** : `*State`
 
-## 🔄 Cycle de Développement
+* **Pages**: `*Page`
+* **Widgets**: `*Widget`
+* **Blocs**: `*Bloc`
+* **Events**: `*Event`
+* **States**: `*State`
 
-### 1. Créer une Feature
+## Development Cycle
+
+### 1. Create a Feature
+
 ```bash
-# Structure à créer pour une nouvelle feature
 features/feature_name/
 ├── data/
 │   ├── datasources/
@@ -221,55 +245,59 @@ features/feature_name/
 └── feature_name.dart
 ```
 
-### 2. Implémentation
-1. Créer les entités du domaine
-2. Définir les interfaces des repositories
-3. Créer les use cases
-4. Implémenter les data sources
-5. Créer les modèles de données
-6. Implémenter les repositories
-7. Créer les BLoCs
-8. Développer l'interface utilisateur
+### 2. Implementation
 
-### 3. Tests
-- Tests unitaires pour les use cases
-- Tests d'intégration pour les repositories
-- Tests de widgets pour l'UI
+1. Create domain entities
+2. Define repository interfaces
+3. Create use cases
+4. Implement data sources
+5. Create data models
+6. Implement repositories
+7. Create BLoCs
+8. Develop UI
 
-## 📦 Dépendances Principales
+### 3. Testing
 
-- **flutter_bloc** : Gestion d'état
-- **get_it** : Injection de dépendances
-- **dartz** : Programmation fonctionnelle
-- **equatable** : Comparaison d'objets
-- **http** : Client HTTP
-- **shared_preferences** : Stockage local
-- **flutter_secure_storage** : Stockage sécurisé
-- **intl** : Internationalisation
+* Unit tests for use cases
+* Integration tests for repositories
+* Widget tests for UI
 
-## 🎯 Bonnes Pratiques
+## Key Dependencies
 
-1. **Séparation des responsabilités** : Chaque couche a un rôle défini
-2. **Dépendances inversées** : Le domaine ne dépend pas de l'infrastructure
-3. **Testabilité** : Code facilement testable avec des mocks
-4. **Réutilisabilité** : Widgets et services réutilisables
-5. **Maintenabilité** : Code organisé et documenté
-6. **Performance** : Optimisations et bonnes pratiques Flutter
+* **flutter_bloc**: State management
+* **get_it**: Dependency injection
+* **dartz**: Functional programming
+* **equatable**: Object comparison
+* **http**: HTTP client
+* **shared_preferences**: Local storage
+* **flutter_secure_storage**: Secure storage
+* **intl**: Internationalization
 
-## 🔧 Configuration
+## Best Practices
 
-### Variables d'Environnement
+1. Separation of responsibilities: each layer has a defined role
+2. Inverted dependencies: domain does not depend on infrastructure
+3. Testability: easily testable code with mocks
+4. Reusability: reusable widgets and services
+5. Maintainability: organized and documented code
+6. Performance: Flutter optimization best practices
+
+## Configuration
+
+### Environment Variables
+
 ```dart
-// Dans constants/app_constants.dart
+// constants/app_constants.dart
 static const String baseUrl = 'https://api.example.com';
 static const Duration apiTimeout = Duration(seconds: 30);
 ```
 
-### Thèmes
+### Themes
+
 ```dart
-// Personnalisation des couleurs dans core/theme/colors.dart
+// core/theme/colors.dart
 static const Color primary = Color(0xFF1562D9);
 static const Color secondary = Color(0xFF6C757D);
 ```
 
-Cette architecture fournit une base solide et évolutive pour vos projets Flutter, avec une séparation claire des responsabilités et une structure maintenable.
+This architecture provides a scalable and maintainable Flutter project foundation with clear separation of concerns.
