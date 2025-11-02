@@ -134,7 +134,7 @@ export async function video_frame(socket: Socket, data: any, context: HandlerCon
         const formData = new FormData();
         formData.append("file", new Blob([buf], { type: "image/jpeg" }), "frame.jpg");
         if (data?.prompt) formData.append("prompt", String(data.prompt));
-        else formData.append("prompt", "Describe this image in accurate, concise detail.");
+        else formData.append("prompt", "You are an expert in urban planning with a focus on accessibility. Please analyze the attached image and provide a professional audit. Your audit should include observations on the accessibility of infrastructure, public transportation, design elements, and any potential barriers. Additionally, provide recommendations for improvements to ensure compliance with accessibility standards.");
 
         formData.append("max_new_tokens", String(data?.max_new_tokens ?? 128));
         formData.append("temperature", String(data?.temperature ?? 0.2));

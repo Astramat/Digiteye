@@ -7,7 +7,7 @@ class SocketService extends ChangeNotifier {
   io.Socket? _socket;
   bool _isConnected = false;
   // Assurez-vous que l'URL par défaut est sans slash final pour être propre.
-  String _serverUrl = 'https://3383f67b7ee5.ngrok-free.app';
+  String _serverUrl = 'http://localhost:3000';
   String? _connectionError;
   final Map<String, List<Function(dynamic)>> _listeners = {};
   bool _isConnecting = false;

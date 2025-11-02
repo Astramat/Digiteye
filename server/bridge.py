@@ -38,7 +38,6 @@ if not torch.cuda.is_available():
 MODEL_ID = "Qwen/Qwen2-VL-2B-Instruct"
 
 # Prompt par défaut pour Qwen2-VL-2B-Instruct
-DEFAULT_PROMPT = "Describe this image in accurate, concise detail."
 
 # Dossier local où stocker les poids (choisissez un emplacement persistant/rapide)
 # Exemple Windows : D:/LAURA/llm/weights/Qwen2-VL-2B-Instruct
@@ -176,7 +175,8 @@ def caption_local(
     max_new_tokens: int = 128,
     temperature: float = 0.2,
 ) -> str:
-    user_text = prompt or DEFAULT_PROMPT
+    print(f"prompt: {prompt}")
+    user_text = prompt
 
     messages = [
         {

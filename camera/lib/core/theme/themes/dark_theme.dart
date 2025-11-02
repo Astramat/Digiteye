@@ -126,9 +126,10 @@ class DarkTheme {
         labelStyle: AppTextStyles.label.copyWith(color: DarkColors.textPrimary),
         hintStyle: AppTextStyles.body2.copyWith(color: DarkColors.textLight),
       ),
-      
+
+          
       // Cartes
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: DarkColors.surface,
         elevation: 2,
         shape: RoundedRectangleBorder(
@@ -136,9 +137,9 @@ class DarkTheme {
         ),
         margin: const EdgeInsets.all(AppSpacing.paddingSM),
       ),
-      
+
       // Dialogs
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: DarkColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppBorderRadius.dialog),
@@ -146,7 +147,7 @@ class DarkTheme {
         titleTextStyle: AppTextStyles.heading5.copyWith(color: DarkColors.textPrimary),
         contentTextStyle: AppTextStyles.body1.copyWith(color: DarkColors.textPrimary),
       ),
-      
+
       // Bottom Navigation Bar
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: DarkColors.surface,

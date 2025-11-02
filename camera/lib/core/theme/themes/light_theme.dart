@@ -105,8 +105,8 @@ class LightTheme {
         hintStyle: AppTextStyles.body2.copyWith(color: AppColors.textLight),
       ),
       
-      // Cartes
-      cardTheme: CardTheme(
+      // Cards
+      cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 2,
         shape: RoundedRectangleBorder(
@@ -114,9 +114,9 @@ class LightTheme {
         ),
         margin: const EdgeInsets.all(AppSpacing.paddingSM),
       ),
-      
+
       // Dialogs
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppBorderRadius.dialog),
@@ -124,7 +124,6 @@ class LightTheme {
         titleTextStyle: AppTextStyles.heading5,
         contentTextStyle: AppTextStyles.body1,
       ),
-      
       // Bottom Navigation Bar
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
